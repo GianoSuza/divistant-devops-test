@@ -36,6 +36,8 @@ services:
       DB_NAME: UserDB
       DB_USERNAME: ${MYSQL_USER}
       DB_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "8080:8080"
     networks:
       - app_net
 
