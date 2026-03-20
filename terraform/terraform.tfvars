@@ -1,0 +1,5 @@
+aws_region         = "ap-southeast-1"
+key_name           = "divistant-key"
+public_key_path    = "D:/Study/AWS/keys/divistant-key.pub"
+my_ip              = "182.4.71.230"
+backup_bucket_name = "divistant-test-devops-backup-001"
