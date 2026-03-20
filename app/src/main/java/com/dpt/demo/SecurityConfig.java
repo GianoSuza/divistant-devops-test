@@ -11,15 +11,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/", "/login", "/register", "/home",
-                                "/css/**", "/js/**", "/images/**", "/webjars/**")
-                        .permitAll()
-                        .anyRequest().permitAll())
-                .formLogin(form -> form.disable())
-                .httpBasic(httpBasic -> httpBasic.disable());
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers(
+                        "/", "/login", "/register", "/home",
+                        "/css/**", "/js/**", "/images/**", "/webjars/**")
+                .permitAll()
+                .anyRequest().permitAll()
+                .and()
+                .formLogin().disable()
+                .httpBasic().disable();
 
         return http.build();
     }
