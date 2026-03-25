@@ -20,3 +20,11 @@ systemctl start docker
 
 mkdir -p /opt/app /opt/backup
 echo "BACKUP_BUCKET=${backup_bucket}" > /opt/backup/.env
+
+# Set execute permissions for backup and restore scripts
+if [ -f /opt/app/divistant-devops-test/app/scripts/backup.sh ]; then
+  chmod +x /opt/app/divistant-devops-test/app/scripts/backup.sh
+fi
+if [ -f /opt/app/divistant-devops-test/app/scripts/restore.sh ]; then
+  chmod +x /opt/app/divistant-devops-test/app/scripts/restore.sh
+fi

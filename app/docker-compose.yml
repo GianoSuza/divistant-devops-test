@@ -16,7 +16,7 @@ services:
     networks:
       - app_net
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${MYSQL_ROOT_PASSWORD}"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p'${MYSQL_ROOT_PASSWORD}'"]
       interval: 10s
       timeout: 5s
       retries: 10
