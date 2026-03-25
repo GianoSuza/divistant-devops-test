@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-APP_DIR="/opt/app/app"
+APP_DIR="/opt/app/divistant-devops-test/app"
 BACKUP_DIR="/opt/backup"
 TIMESTAMP=$(date +%Y%m%d-%H%M%S)
 TMP_DIR="${BACKUP_DIR}/tmp-${TIMESTAMP}"
