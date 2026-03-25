@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import javax.websocket.Session;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -28,15 +28,17 @@ public class login {
 
 	private String userId = "";
 
-	private String errorMessage="";
-	
-	@RequestMapping(value = "login", method = RequestMethod.POST)
-	public ModelAndView login(String userName, String password) throws ClassNotFoundException {
+	private String errorMessage = "";
 
-		
+	@RequestMapping(value = "login", method = RequestMethod.POST)
+	public ModelAndView login(String userName, String password, HttpSession session) throws ClassNotFoundException {
+
+		userId = "";
+		errorMessage = "";
+
 		Class.forName("com.mysql.jdbc.Driver");
 		// validate user credentials
-		String query = "select * from Employee where username='" + userName + "' and password='"+password+"'";
+		String query = "select * from Employee where username='" + userName + "' and password='" + password + "'";
 		try (Connection con = DriverManager.getConnection(url, DBusername, DBpassword);
 				Statement st = con.createStatement();
 				ResultSet rs = st.executeQuery(query)) {
@@ -47,33 +49,35 @@ public class login {
 			}
 		} catch (SQLException ex) {
 			System.out.println(ex.getMessage());
-			errorMessage=ex.getMessage();
+			errorMessage = ex.getMessage();
 		}
 
 		ModelAndView mv;
-		if (!userId.isEmpty())
-		{			
+		if (!userId.isEmpty()) {
+			session.setAttribute("username", userId);
 			mv = new ModelAndView("user");
 			mv.addObject("username", userId);
-		}
-		else
-		{
-			
+		} else {
+
 			mv = new ModelAndView("login");
 			mv.addObject("errorMessage", errorMessage);
 		}
 
 		return mv;
 	}
-	
-	
-	
+
+	@RequestMapping(value = "logout", method = RequestMethod.GET)
+	public ModelAndView logout(HttpSession session) {
+		session.invalidate();
+		ModelAndView mv = new ModelAndView("login");
+		return mv;
+	}
+
 	@RequestMapping(value = "login", method = RequestMethod.GET)
-	public ModelAndView registerform()
-	{
-		ModelAndView mv=new ModelAndView("login");
-		
-		return mv;		
+	public ModelAndView registerform() {
+		ModelAndView mv = new ModelAndView("login");
+
+		return mv;
 	}
 
 }
