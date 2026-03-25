@@ -46,8 +46,8 @@ if [ -z "${MYSQL_ROOT_PASSWORD:-}" ]; then
 fi
 
 log "Database backup..."
-# Use bash -c to ensure proper variable expansion with sudo
-if ! bash -c "docker compose -f /opt/app/divistant-devops-test/app/docker-compose.yml exec -T mysql mysqldump -u root -p'${MYSQL_ROOT_PASSWORD}' --databases UserDB" > "${TMP_DIR}/db.sql"; then
+# Use direct pattern same as working manual test
+if ! docker compose -f /opt/app/divistant-devops-test/app/docker-compose.yml exec -T mysql mysqldump -u root -p"${MYSQL_ROOT_PASSWORD}" --databases UserDB > "${TMP_DIR}/db.sql"; then
     log "ERROR: Database dump failed"
     exit 1
 fi
