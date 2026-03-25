@@ -44,7 +44,7 @@ if [ -z "${MYSQL_ROOT_PASSWORD:-}" ]; then
 fi
 
 log "Database backup..."
-if ! docker compose exec -T -e MYSQL_PWD="${MYSQL_ROOT_PASSWORD}" mysql mysqldump -u root --databases UserDB > "${TMP_DIR}/db.sql"; then
+if ! docker compose exec -T mysql mysqldump -u root -p"${MYSQL_ROOT_PASSWORD}" --databases UserDB > "${TMP_DIR}/db.sql"; then
     log "ERROR: Database dump failed"
     exit 1
 fi
