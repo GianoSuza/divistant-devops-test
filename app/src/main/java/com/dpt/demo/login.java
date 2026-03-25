@@ -51,7 +51,7 @@ public class login {
 		}
 
 		ModelAndView mv;
-		if (userId != "")
+		if (!userId.isEmpty())
 		{			
 			mv = new ModelAndView("user");
 			mv.addObject("username", userId);
