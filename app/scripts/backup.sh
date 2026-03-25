@@ -24,7 +24,9 @@ if [ ! -f .env ]; then
     log "ERROR: .env file not found in $APP_DIR"
     exit 1
 fi
+log "Loading .env from $PWD/.env"
 source .env
+log "MYSQL_ROOT_PASSWORD loaded: $(if [ -z "${MYSQL_ROOT_PASSWORD:-}" ]; then echo 'EMPTY'; else echo 'SET'; fi)"
 
 if [ ! -f /opt/backup/.env ]; then
     log "ERROR: /opt/backup/.env file not found"
@@ -44,10 +46,14 @@ if [ -z "${MYSQL_ROOT_PASSWORD:-}" ]; then
 fi
 
 log "Database backup..."
-if ! docker compose exec -T mysql mysqldump -u root -p"${MYSQL_ROOT_PASSWORD}" --databases UserDB > "${TMP_DIR}/db.sql"; then
+# Use MYSQL_PWD environment variable to avoid password escaping issues
+export MYSQL_PWD="${MYSQL_ROOT_PASSWORD}"
+if ! docker compose exec -T mysql mysqldump -u root --databases UserDB > "${TMP_DIR}/db.sql"; then
     log "ERROR: Database dump failed"
+    unset MYSQL_PWD  # Clear password from environment for security
     exit 1
 fi
+unset MYSQL_PWD  # Clear password from environment for security
 log "Database dump completed successfully"
 
 log "Creating archive..."
