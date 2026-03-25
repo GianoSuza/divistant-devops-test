@@ -46,8 +46,8 @@ if [ -z "${MYSQL_ROOT_PASSWORD:-}" ]; then
 fi
 
 log "Database backup..."
-# Use MYSQL_PWD environment variable to avoid password escaping issues
-if ! docker compose exec -T -e MYSQL_PWD="${MYSQL_ROOT_PASSWORD}" mysql mysqldump -u root --databases UserDB > "${TMP_DIR}/db.sql"; then
+# Use direct password approach similar to manual test that worked
+if ! docker compose exec -T mysql mysqldump -u root -p$(printf '%s' "$MYSQL_ROOT_PASSWORD") --databases UserDB > "${TMP_DIR}/db.sql"; then
     log "ERROR: Database dump failed"
     exit 1
 fi
