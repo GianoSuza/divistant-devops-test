@@ -47,13 +47,10 @@ fi
 
 log "Database backup..."
 # Use MYSQL_PWD environment variable to avoid password escaping issues
-export MYSQL_PWD="${MYSQL_ROOT_PASSWORD}"
-if ! docker compose exec -T mysql mysqldump -u root --databases UserDB > "${TMP_DIR}/db.sql"; then
+if ! docker compose exec -T -e MYSQL_PWD="${MYSQL_ROOT_PASSWORD}" mysql mysqldump -u root --databases UserDB > "${TMP_DIR}/db.sql"; then
     log "ERROR: Database dump failed"
-    unset MYSQL_PWD  # Clear password from environment for security
     exit 1
 fi
-unset MYSQL_PWD  # Clear password from environment for security
 log "Database dump completed successfully"
 
 log "Creating archive..."
