@@ -58,12 +58,14 @@ services:
     image: prom/node-exporter:latest
     container_name: node-exporter
     restart: always
-    pid: host
-    network_mode: host
+    ports:
+      - "9100:9100"
     volumes:
       - /:/host:ro,rslave
     command:
       - "--path.rootfs=/host"
+    networks:
+      - app_net
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
